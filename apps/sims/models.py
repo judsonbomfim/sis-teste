@@ -1,24 +1,33 @@
 from django.db import models
 
-SIM_STATUS = {
+SIM_STATUS = [
     ('DS', 'Disponível'),
     ('AT', 'Ativado'),
-    ('CC', 'Cancelado'),
-}
-OPERATOR = {
+    ('CC', 'Cancelado')
+]
+SIM_OPERATOR = [
     ('TM', 'T-Mobile'), 
     ('CM', 'China Mobile'),
-    ('TC', 'Telcom'), 
-}
-TYPES = {
+    ('TC', 'Telcom')
+]
+SIM_TYPES = [
     ('sim', 'SIM (Físico)'),   
-    ('esim', 'eSIM (Virtual)'),   
-}
+    ('esim', 'eSIM (Virtual)')  
+]
 
 class Sims(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True, serialize=False)
     sim = models.CharField(max_length=20)
     link = models.URLField(null=True, blank=True)
-    type =  models.CharField(max_length=4, choices=TYPES)
-    operator = models.CharField(max_length=2, choices=OPERATOR)
-    sim_status = models.CharField(max_length=2, choices=SIM_STATUS, default='DS')
+    type_sim =  models.CharField(max_length=20, choices=SIM_TYPES)
+    operator = models.CharField(max_length=20, choices=SIM_OPERATOR)
+    sim_status = models.CharField(max_length=20, choices=SIM_STATUS, default='DS')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = 'sims'
+        verbose_name = 'Sim'
+        verbose_name_plural = 'Sims'
+        ordering = ['id']
+    def __str__(self):
+        return self.sim
